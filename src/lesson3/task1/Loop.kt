@@ -281,7 +281,35 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var smallCounter = 0
+    var bigCounter = 0
+    var mediumCounter = 0
+    var number = 0
+    var digit = 0
+    var i = 0
+    while (smallCounter + bigCounter < n) {
+        i++
+        number = i * i
+        mediumCounter = smallCounter
+        smallCounter = 0
+        bigCounter += mediumCounter
+        while (number != 0) {
+            smallCounter++
+            number /= 10
+            if (smallCounter + bigCounter == n) {
+                bigCounter += smallCounter
+                break
+            }
+        }
+    }
+    number = i * i
+    while (smallCounter != digitNumber(number)) {
+        number /= 10
+    }
+    digit = number % 10
+    return digit
+}
 
 /**
  * Сложная (5 баллов)
@@ -292,4 +320,32 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    var smallCounter = 0
+    var bigCounter = 0
+    var mediumCounter = 0
+    var number = 0
+    var digit = 0
+    var i = 0
+    while (smallCounter + bigCounter < n) {
+        i++
+        number = fib(i)
+        mediumCounter = smallCounter
+        smallCounter = 0
+        bigCounter += mediumCounter
+        while (number != 0) {
+            smallCounter++
+            number /= 10
+            if (smallCounter + bigCounter == n) {
+                bigCounter += smallCounter
+                break
+            }
+        }
+    }
+    number = fib(i)
+    while (smallCounter != digitNumber(number)) {
+        number /= 10
+    }
+    digit = number % 10
+    return digit
+}
