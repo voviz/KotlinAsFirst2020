@@ -18,7 +18,7 @@ import kotlin.math.sqrt
 fun factorial(n: Int): Double {
     var result = 1.0
     for (i in 1..n) {
-        result = result * i // Please do not fix in master
+        result *= i // Please do not fix in master
     }
     return result
 }
@@ -262,7 +262,14 @@ fun isPalindrome(n: Int): Boolean = revert(n) == n
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun hasDifferentDigits(n: Int): Boolean = TODO()
+fun hasDifferentDigits(n: Int): Boolean {
+    var number = n
+    while (number > 9) {
+        if (number % 10 != number / 10 % 10) return true
+        number /= 10
+    }
+    return false
+}
 
 /**
  * Средняя (4 балла)
@@ -298,16 +305,13 @@ fun cos(x: Double, eps: Double): Double = TODO()
 fun squareSequenceDigit(n: Int): Int {
     var smallCounter = 0
     var bigCounter = 0
-    var mediumCounter = 0
-    var number = 0
-    var digit = 0
+    var number: Int
     var i = 0
     while (smallCounter + bigCounter < n) {
         i++
         number = i * i
-        mediumCounter = smallCounter
+        bigCounter += smallCounter
         smallCounter = 0
-        bigCounter += mediumCounter
         while (number != 0) {
             smallCounter++
             number /= 10
@@ -321,8 +325,7 @@ fun squareSequenceDigit(n: Int): Int {
     while (smallCounter != digitNumber(number)) {
         number /= 10
     }
-    digit = number % 10
-    return digit
+    return number % 10
 }
 
 /**
@@ -337,16 +340,13 @@ fun squareSequenceDigit(n: Int): Int {
 fun fibSequenceDigit(n: Int): Int {
     var smallCounter = 0
     var bigCounter = 0
-    var mediumCounter = 0
-    var number = 0
-    var digit = 0
+    var number: Int
     var i = 0
     while (smallCounter + bigCounter < n) {
         i++
         number = fib(i)
-        mediumCounter = smallCounter
+        bigCounter += smallCounter
         smallCounter = 0
-        bigCounter += mediumCounter
         while (number != 0) {
             smallCounter++
             number /= 10
@@ -360,6 +360,5 @@ fun fibSequenceDigit(n: Int): Int {
     while (smallCounter != digitNumber(number)) {
         number /= 10
     }
-    digit = number % 10
-    return digit
+    return number % 10
 }
