@@ -148,7 +148,7 @@ fun mean(list: List<Double>): Double {
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
     val mean = mean(list)
-    for (i in 0 until list.size) list[i] -= mean
+    for (i in list.indices) list[i] -= mean
     return list
 }
 
@@ -162,7 +162,7 @@ fun center(list: MutableList<Double>): MutableList<Double> {
 fun times(a: List<Int>, b: List<Int>): Int {
     if (a.isEmpty()) return 0
     var c = 0
-    for (i in 0 until a.size) c += a[i] * b[i]
+    for (i in a.indices) c += a[i] * b[i]
     return c
 }
 
@@ -177,7 +177,7 @@ fun times(a: List<Int>, b: List<Int>): Int {
 fun polynom(p: List<Int>, x: Int): Int {
     if (p.isEmpty()) return 0
     var px = 0
-    for (i in 0 until p.size) {
+    for (i in p.indices) {
         px += p[i] * x.toDouble().pow(i).toInt()
     }
     return px
@@ -195,7 +195,7 @@ fun polynom(p: List<Int>, x: Int): Int {
  */
 fun accumulate(list: MutableList<Int>): MutableList<Int> {
     var sum = 0
-    for (i in 0 until list.size) {
+    for (i in list.indices) {
         sum += list[i]
         list[i] = sum
     }
@@ -240,20 +240,12 @@ fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*
 fun convert(n: Int, base: Int): List<Int> {
     val list = mutableListOf<Int>()
     var number = n
-    var a: Int
     list += number % base
     while (number >= base) {
         number /= base
         list += number % base
     }
-
-    for (i in 0 until list.size / 2) {
-        a = list[i]
-        list[i] = list[list.size - 1 - i]
-        list[list.size - 1 - i] = a
-    }
-
-    return list
+    return list.reversed()
 }
 
 /**
@@ -267,85 +259,89 @@ fun convert(n: Int, base: Int): List<Int> {
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, n.toString(base) и подобные), запрещается.
  */
+
 fun convertToString(n: Int, base: Int): String {
     val list = mutableListOf<String>()
-    var number = n
-    val a = mutableListOf("")
-    var rem: Int
-    when (number % base) {
-        10 -> list += "a"
-        11 -> list += "b"
-        12 -> list += "c"
-        13 -> list += "d"
-        14 -> list += "e"
-        15 -> list += "f"
-        16 -> list += "g"
-        17 -> list += "h"
-        18 -> list += "i"
-        19 -> list += "j"
-        20 -> list += "k"
-        21 -> list += "l"
-        22 -> list += "m"
-        23 -> list += "n"
-        24 -> list += "o"
-        25 -> list += "p"
-        26 -> list += "q"
-        27 -> list += "r"
-        28 -> list += "s"
-        29 -> list += "t"
-        30 -> list += "u"
-        31 -> list += "v"
-        32 -> list += "w"
-        33 -> list += "x"
-        34 -> list += "y"
-        35 -> list += "z"
-        else -> {
-            rem = number % base
-            list += "$rem"
-        }
-    }
-    while (number >= base) {
-        number /= base
-        when (number % base) {
-            10 -> list += "a"
-            11 -> list += "b"
-            12 -> list += "c"
-            13 -> list += "d"
-            14 -> list += "e"
-            15 -> list += "f"
-            16 -> list += "g"
-            17 -> list += "h"
-            18 -> list += "i"
-            19 -> list += "j"
-            20 -> list += "k"
-            21 -> list += "l"
-            22 -> list += "m"
-            23 -> list += "n"
-            24 -> list += "o"
-            25 -> list += "p"
-            26 -> list += "q"
-            27 -> list += "r"
-            28 -> list += "s"
-            29 -> list += "t"
-            30 -> list += "u"
-            31 -> list += "v"
-            32 -> list += "w"
-            33 -> list += "x"
-            34 -> list += "y"
-            35 -> list += "z"
-            else -> {
-                rem = number % base
-                list += "$rem"
-            }
-        }
-    }
-    for (i in 0 until list.size / 2) {
-        a[0] = list[i]
-        list[i] = list[list.size - 1 - i]
-        list[list.size - 1 - i] = a[0]
+    for (elem in convert(n, base)) {
+        if (elem > 9) list.add(('a' + elem - 10).toString())
+        else list.add("$elem")
     }
     return list.joinToString(separator = "")
 }
+//fun convertToString(n: Int, base: Int): String {
+//    val list = mutableListOf<String>()
+//    var number = n
+//    val a = mutableListOf("")
+//    var rem: Int
+//    when (number % base) {
+//        10 -> list += "a"
+//        11 -> list += "b"
+//        12 -> list += "c"
+//        13 -> list += "d"
+//        14 -> list += "e"
+//        15 -> list += "f"
+//        16 -> list += "g"
+//        17 -> list += "h"
+//        18 -> list += "i"
+//        19 -> list += "j"
+//        20 -> list += "k"
+//        21 -> list += "l"
+//        22 -> list += "m"
+//        23 -> list += "n"
+//        24 -> list += "o"
+//        25 -> list += "p"
+//        26 -> list += "q"
+//        27 -> list += "r"
+//        28 -> list += "s"
+//        29 -> list += "t"
+//        30 -> list += "u"
+//        31 -> list += "v"
+//        32 -> list += "w"
+//        33 -> list += "x"
+//        34 -> list += "y"
+//        35 -> list += "z"
+//        else -> {
+//            rem = number % base
+//            list += "$rem"
+//        }
+//    }
+//    while (number >= base) {
+//        number /= base
+//        when (number % base) {
+//            10 -> list += "a"
+//            11 -> list += "b"
+//            12 -> list += "c"
+//            13 -> list += "d"
+//            14 -> list += "e"
+//            15 -> list += "f"
+//            16 -> list += "g"
+//            17 -> list += "h"
+//            18 -> list += "i"
+//            19 -> list += "j"
+//            20 -> list += "k"
+//            21 -> list += "l"
+//            22 -> list += "m"
+//            23 -> list += "n"
+//            24 -> list += "o"
+//            25 -> list += "p"
+//            26 -> list += "q"
+//            27 -> list += "r"
+//            28 -> list += "s"
+//            29 -> list += "t"
+//            30 -> list += "u"
+//            31 -> list += "v"
+//            32 -> list += "w"
+//            33 -> list += "x"
+//            34 -> list += "y"
+//            35 -> list += "z"
+//            else -> {
+//                rem = number % base
+//                list += "$rem"
+//            }
+//        }
+//    }
+//    return list.reversed().joinToString(separator = "")
+//}
 
 /**
  * Средняя (3 балла)
@@ -354,7 +350,15 @@ fun convertToString(n: Int, base: Int): String {
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int = TODO()
+fun decimal(digits: List<Int>, base: Int): Int {
+    var res = 0
+    var i = 0.0
+    for (elem in digits.reversed()) {
+        res += elem * base.toDouble().pow(i).toInt()
+        i++
+    }
+    return res
+}
 
 /**
  * Сложная (4 балла)
@@ -368,7 +372,16 @@ fun decimal(digits: List<Int>, base: Int): Int = TODO()
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
-fun decimalFromString(str: String, base: Int): Int = TODO()
+fun decimalFromString(str: String, base: Int): Int {
+    var res = 0
+    var i = 0.0
+    for (char in str.reversed()) {
+        res += if (char > '9') (char - 'a' + 10) * base.toDouble().pow(i).toInt()
+        else (char - '1' + 1) * base.toDouble().pow(i).toInt()
+        i++
+    }
+    return res
+}
 
 /**
  * Сложная (5 баллов)
@@ -387,4 +400,114 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    val list = mutableListOf<String>()
+    if (n / 100000 >= 1) {
+        when (n / 100000) {
+            1 -> list += "сто"
+            2 -> list += "двести"
+            3 -> list += "триста"
+            4 -> list += "четыреста"
+            5 -> list += "пятьсот"
+            6 -> list += "шестьсот"
+            7 -> list += "семьсот"
+            8 -> list += "восемьсот"
+            9 -> list += "девятьсот"
+        }
+    }
+    if (n / 1000 % 100 in 10..19) {
+        when (n / 1000 % 100) {
+            10 -> list += "десять"
+            11 -> list += "одиннадцать"
+            12 -> list += "двенадцать"
+            13 -> list += "тринадцать"
+            14 -> list += "четырнадцать"
+            15 -> list += "пятнадцать"
+            16 -> list += "шестнадцать"
+            17 -> list += "семнадцать"
+            18 -> list += "восемнадцать"
+            19 -> list += "девятнадцать"
+        }
+    } else {
+        when (n / 10000 % 10) {
+            2 -> list += "двадцать"
+            3 -> list += "тридцать"
+            4 -> list += "сорок"
+            5 -> list += "пятьдесят"
+            6 -> list += "шестьдесят"
+            7 -> list += "семьдесят"
+            8 -> list += "восемьдесят"
+            9 -> list += "девяносто"
+        }
+        when (n / 1000 % 10) {
+            1 -> list += "одна"
+            2 -> list += "две"
+            3 -> list += "три"
+            4 -> list += "четыре"
+            5 -> list += "пять"
+            6 -> list += "шесть"
+            7 -> list += "семь"
+            8 -> list += "восемь"
+            9 -> list += "девять"
+        }
+    }
+    if (n / 1000 >= 1) {
+        when (n / 1000 % 10) {
+            1 -> list += "тысяча"
+            2 -> list += "тысячи"
+            3 -> list += "тысячи"
+            4 -> list += "тысячи"
+            else -> list += "тысяч"
+        }
+    }
+    if (n / 100 >= 1) {
+        when (n / 100 % 10) {
+            1 -> list += "сто"
+            2 -> list += "двести"
+            3 -> list += "триста"
+            4 -> list += "четыреста"
+            5 -> list += "пятьсот"
+            6 -> list += "шестьсот"
+            7 -> list += "семьсот"
+            8 -> list += "восемьсот"
+            9 -> list += "девятьсот"
+        }
+    }
+    if (n % 100 in 10..19) {
+        when (n % 100) {
+            10 -> list += "десять"
+            11 -> list += "одиннадцать"
+            12 -> list += "двенадцать"
+            13 -> list += "тринадцать"
+            14 -> list += "четырнадцать"
+            15 -> list += "пятнадцать"
+            16 -> list += "шестнадцать"
+            17 -> list += "семнадцать"
+            18 -> list += "восемнадцать"
+            19 -> list += "девятнадцать"
+        }
+    } else {
+        when (n / 10 % 10) {
+            2 -> list += "двадцать"
+            3 -> list += "тридцать"
+            4 -> list += "сорок"
+            5 -> list += "пятьдесят"
+            6 -> list += "шестьдесят"
+            7 -> list += "семьдесят"
+            8 -> list += "восемьдесят"
+            9 -> list += "девяносто"
+        }
+        when (n % 10) {
+            1 -> list += "один"
+            2 -> list += "два"
+            3 -> list += "три"
+            4 -> list += "четыре"
+            5 -> list += "пять"
+            6 -> list += "шесть"
+            7 -> list += "семь"
+            8 -> list += "восемь"
+            9 -> list += "девять"
+        }
+    }
+    return list.joinToString(separator = " ")
+}
