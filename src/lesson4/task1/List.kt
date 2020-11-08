@@ -390,7 +390,7 @@ fun russian(n: Int): String {
     }
     if (secondHalf >= 1) {
         list += hundredsAndDozens(secondHalf)
-        if (secondHalf % 100 !in 10..19)
+        if (secondHalf % 10 >= 1 && secondHalf % 100 !in 10..19)
             list += ones[secondHalf % 10 - 1]
     }
     return list.joinToString(separator = " ")
