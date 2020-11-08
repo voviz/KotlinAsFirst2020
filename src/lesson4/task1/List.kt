@@ -359,7 +359,7 @@ fun russian(n: Int): String {
     )
     val firstHalf = n / 1000
     val secondHalf = n % 1000
-    fun hundredsAndSomeDozens(number: Int): List<String> {
+    fun hundredsAndDozens(number: Int): List<String> {
         val list1 = mutableListOf<String>()
         if (number / 100 >= 1)
             list1 += hundreds[number / 100 - 1]
@@ -370,7 +370,7 @@ fun russian(n: Int): String {
         return list1
     }
     if (firstHalf >= 1) {
-        list += hundredsAndSomeDozens(firstHalf)
+        list += hundredsAndDozens(firstHalf)
         if (firstHalf % 100 !in 10..19)
             if (firstHalf % 10 in 1..2)
                 list += oneTwo[firstHalf % 10 - 1]
@@ -388,8 +388,8 @@ fun russian(n: Int): String {
             else -> "тысяч"
         }
     }
-    if (secondHalf > 1) {
-        list += hundredsAndSomeDozens(secondHalf)
+    if (secondHalf >= 1) {
+        list += hundredsAndDozens(secondHalf)
         if (secondHalf % 100 !in 10..19)
             list += ones[secondHalf % 10 - 1]
     }
