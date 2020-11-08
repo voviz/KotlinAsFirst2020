@@ -299,13 +299,21 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * (например, str.toInt(base)), запрещается.
  */
 fun decimalFromString(str: String, base: Int): Int {
-    val list = mutableListOf<Int>()
-    for (char in str) {
-        list += if (char > '9') (char - 'a' + 10)
-        else (char - '1' + 1)
+    val list = str.map { char ->
+        if (char.toInt() - '0'.toInt() > 9) (char.toInt() - 'a'.toInt() + 10)
+        else (char.toInt() - '0'.toInt())
     }
     return decimal(list, base)
 }
+// Я это оставлю для себя чтобы было понятно что делает функция .map
+//fun decimalFromString(str: String, base: Int): Int {
+//    val list = mutableListOf<Int>()
+//    for (char in str) {
+//        list += if (char > '9') (char - 'a' + 10)
+//        else (char - '0')
+//    }
+//    return decimal(list, base)
+//}
 
 /**
  * Сложная (5 баллов)
@@ -326,59 +334,53 @@ fun roman(n: Int): String = TODO()
  */
 fun russian(n: Int): String {
     val list = mutableListOf<String>()
-    if (n / 100000 >= 1) {
-        when (n / 100000) {
-            1 -> list += "сто"
-            2 -> list += "двести"
-            3 -> list += "триста"
-            4 -> list += "четыреста"
-            5 -> list += "пятьсот"
-            6 -> list += "шестьсот"
-            7 -> list += "семьсот"
-            8 -> list += "восемьсот"
-            9 -> list += "девятьсот"
-        }
+    val hundreds = listOf(
+        "сто", "двести", "триста",
+        "четыреста", "пятьсот", "шестьсот",
+        "семьсот", "восемьсот", "девятьсот"
+    )
+    val dozens = listOf(
+        "двадцать", "тридцать", "сорок",
+        "пятьдесят", "шестьдесят", "семьдесят",
+        "восемьдесят", "девяносто"
+    )
+    val otherDozens = listOf(
+        "десять", "одиннадцать", "двенадцать", "тринадцать",
+        "четырнадцать", "пятнадцать", "шестнадцать",
+        "семнадцать", "восемнадцать", "девятнадцать"
+    )
+    val ones = listOf(
+        "один", "два", "три",
+        "четыре", "пять", "шесть",
+        "семь", "восемь", "девять"
+    )
+    val oneTwo = listOf(
+        "одна", "две"
+    )
+    val firstHalf = n / 1000
+    val secondHalf = n % 1000
+    fun hundredsAndSomeDozens(number: Int): List<String> {
+        val list1 = mutableListOf<String>()
+        if (number / 100 >= 1)
+            list1 += hundreds[number / 100 - 1]
+        if (number % 100 in 10..19)
+            list1 += otherDozens[number % 100 - 10]
+        else if (number / 10 % 10 >= 2)
+            list1 += dozens[number / 10 % 10 - 2]
+        return list1
     }
-    if (n / 1000 % 100 in 10..19) {
-        when (n / 1000 % 100) {
-            10 -> list += "десять"
-            11 -> list += "одиннадцать"
-            12 -> list += "двенадцать"
-            13 -> list += "тринадцать"
-            14 -> list += "четырнадцать"
-            15 -> list += "пятнадцать"
-            16 -> list += "шестнадцать"
-            17 -> list += "семнадцать"
-            18 -> list += "восемнадцать"
-            19 -> list += "девятнадцать"
-        }
-    } else {
-        when (n / 10000 % 10) {
-            2 -> list += "двадцать"
-            3 -> list += "тридцать"
-            4 -> list += "сорок"
-            5 -> list += "пятьдесят"
-            6 -> list += "шестьдесят"
-            7 -> list += "семьдесят"
-            8 -> list += "восемьдесят"
-            9 -> list += "девяносто"
-        }
-        when (n / 1000 % 10) {
-            1 -> list += "одна"
-            2 -> list += "две"
-            3 -> list += "три"
-            4 -> list += "четыре"
-            5 -> list += "пять"
-            6 -> list += "шесть"
-            7 -> list += "семь"
-            8 -> list += "восемь"
-            9 -> list += "девять"
-        }
+    if (firstHalf > 1) {
+        list += hundredsAndSomeDozens(firstHalf)
+        if (firstHalf % 100 !in 10..19)
+            if (firstHalf % 10 in 1..2)
+                list += oneTwo[firstHalf % 10 - 1]
+            else if (firstHalf % 10 in 3..9)
+                list += ones[firstHalf % 10 - 1]
     }
-    if (n / 1000 >= 1 && n / 1000 % 100 in 10..19) {
+    if (firstHalf > 1 && firstHalf % 100 in 10..19)
         list += "тысяч"
-    } else if (n / 1000 >= 1) {
-        list += when (n / 1000 % 10) {
+    else if (firstHalf > 1) {
+        list += when (firstHalf % 10) {
             1 -> "тысяча"
             2 -> "тысячи"
             3 -> "тысячи"
@@ -386,54 +388,10 @@ fun russian(n: Int): String {
             else -> "тысяч"
         }
     }
-    if (n / 100 >= 1) {
-        when (n / 100 % 10) {
-            1 -> list += "сто"
-            2 -> list += "двести"
-            3 -> list += "триста"
-            4 -> list += "четыреста"
-            5 -> list += "пятьсот"
-            6 -> list += "шестьсот"
-            7 -> list += "семьсот"
-            8 -> list += "восемьсот"
-            9 -> list += "девятьсот"
-        }
-    }
-    if (n % 100 in 10..19) {
-        when (n % 100) {
-            10 -> list += "десять"
-            11 -> list += "одиннадцать"
-            12 -> list += "двенадцать"
-            13 -> list += "тринадцать"
-            14 -> list += "четырнадцать"
-            15 -> list += "пятнадцать"
-            16 -> list += "шестнадцать"
-            17 -> list += "семнадцать"
-            18 -> list += "восемнадцать"
-            19 -> list += "девятнадцать"
-        }
-    } else {
-        when (n / 10 % 10) {
-            2 -> list += "двадцать"
-            3 -> list += "тридцать"
-            4 -> list += "сорок"
-            5 -> list += "пятьдесят"
-            6 -> list += "шестьдесят"
-            7 -> list += "семьдесят"
-            8 -> list += "восемьдесят"
-            9 -> list += "девяносто"
-        }
-        when (n % 10) {
-            1 -> list += "один"
-            2 -> list += "два"
-            3 -> list += "три"
-            4 -> list += "четыре"
-            5 -> list += "пять"
-            6 -> list += "шесть"
-            7 -> list += "семь"
-            8 -> list += "восемь"
-            9 -> list += "девять"
-        }
+    if (secondHalf > 1) {
+        list += hundredsAndSomeDozens(secondHalf)
+        if (secondHalf % 100 !in 10..19)
+            list += ones[secondHalf % 10 - 1]
     }
     return list.joinToString(separator = " ")
 }
