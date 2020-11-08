@@ -369,7 +369,7 @@ fun russian(n: Int): String {
             list1 += dozens[number / 10 % 10 - 2]
         return list1
     }
-    if (firstHalf > 1) {
+    if (firstHalf >= 1) {
         list += hundredsAndSomeDozens(firstHalf)
         if (firstHalf % 100 !in 10..19)
             if (firstHalf % 10 in 1..2)
@@ -377,9 +377,9 @@ fun russian(n: Int): String {
             else if (firstHalf % 10 in 3..9)
                 list += ones[firstHalf % 10 - 1]
     }
-    if (firstHalf > 1 && firstHalf % 100 in 10..19)
+    if (firstHalf >= 1 && firstHalf % 100 in 10..19)
         list += "тысяч"
-    else if (firstHalf > 1) {
+    else if (firstHalf >= 1) {
         list += when (firstHalf % 10) {
             1 -> "тысяча"
             2 -> "тысячи"
