@@ -299,21 +299,12 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * (например, str.toInt(base)), запрещается.
  */
 fun decimalFromString(str: String, base: Int): Int {
-    val list = str.map { char ->
-        if (char.toInt() - '0'.toInt() > 9) (char.toInt() - 'a'.toInt() + 10)
-        else (char.toInt() - '0'.toInt())
+    val list = str.map {
+        if (it > '9') (it - 'a' + 10)
+        else (it - '0')
     }
     return decimal(list, base)
 }
-// Я это оставлю для себя чтобы было понятно что делает функция .map
-//fun decimalFromString(str: String, base: Int): Int {
-//    val list = mutableListOf<Int>()
-//    for (char in str) {
-//        list += if (char > '9') (char - 'a' + 10)
-//        else (char - '0')
-//    }
-//    return decimal(list, base)
-//}
 
 /**
  * Сложная (5 баллов)

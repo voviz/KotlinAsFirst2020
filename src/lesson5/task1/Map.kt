@@ -212,7 +212,7 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
     val counterOfElements = mutableMapOf<String, Int>()
     val elementsToRemove = mutableListOf<String>()
     for (elem in list) {
-        counterOfElements[elem] = counterOfElements.getOrDefault(elem, 0) + 1
+        counterOfElements[elem] = (counterOfElements[elem] ?: 0) + 1
     }
     for ((elem, value) in counterOfElements) {
         if (value == 1) elementsToRemove.add(elem)
@@ -270,7 +270,31 @@ fun hasAnagrams(words: List<String>): Boolean = TODO()
  *          "GoodGnome" to setOf()
  *        )
  */
-fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> = TODO()
+fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
+    val handshakes = mutableMapOf<String, Set<String>>()
+    fun findFriends(name1: String, friendSet: Set<String>, name2: String): Set<String> {
+        val setOfFriends = mutableSetOf<String>()
+        if (name1 in friends.keys && !friends[name1].isNullOrEmpty())
+            for (friend in friends.getValue(name1)) {
+                if (friend !in friendSet && friend != name2) {
+                    setOfFriends += friend
+                    for (friends1 in findFriends(friend, setOfFriends.union(friendSet), name2))
+                        setOfFriends += friends1
+                }
+            }
+        return setOfFriends
+    }
+    for ((name, _) in friends) {
+        val set1 = setOf<String>()
+        handshakes[name] = findFriends(name, set1, name).reversed().toSet()
+    }
+    for (setOfFriends in friends.values)
+        for (friend in setOfFriends)
+            if (friend !in handshakes.keys)
+                handshakes[friend] = setOf()
+    return handshakes
+}
+
 /**
  * Сложная (6 баллов)
  *
@@ -288,11 +312,14 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    for (i in 0 until list.size - 1)
-        for (j in i + 1 until list.size)
-            if (list[i] + list[j] == number)
-                return Pair(i, j)
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int?, Int> {
+    val rem = mutableMapOf<Int, Int>()
+    for (i in list.indices) {
+        if (list[i] in rem.keys)
+            return Pair(rem[list[i]], i)
+        else if (number - list[i] !in rem.keys)
+            rem[number - list[i]] = i
+    }
     return Pair(-1, -1)
 }
 
