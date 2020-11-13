@@ -2,6 +2,8 @@
 
 package lesson6.task1
 
+import lesson2.task2.daysInMonth
+
 // Урок 6: разбор строк, исключения
 // Максимальное количество баллов = 13
 // Рекомендуемое количество баллов = 11
@@ -74,7 +76,26 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    val months = listOf(
+        "января", "февраля", "марта",
+        "апреля", "мая", "июня",
+        "июля", "августа", "сентября",
+        "октября", "ноября", "декабря"
+    )
+    val date = str.split(" ").toMutableList()
+    if (date.size != 3)
+        return ""
+    if (date[1] in months) {
+        date[1] = (months.indexOf(date[1]) + 1).toString()
+    } else return ""
+    if (date[0].toInt() !in 1..daysInMonth(date[1].toInt(), date[2].toInt()))
+        return ""
+    val day = date[0].toInt()
+    val month = date[1].toInt()
+    val year = date[2].toInt()
+    return String.format("%02d.%02d.%02d", day, month, year)
+}
 
 /**
  * Средняя (4 балла)
@@ -127,7 +148,26 @@ fun bestLongJump(jumps: String): Int = TODO()
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    val results = jumps.split(" ")
+    var theBest = -1
+    for (i in 0 until results.size - 1 step (2)) {
+        if ("+" in results[i] || "-" in results[i])
+            return -1
+        try {
+            results[i].toInt()
+        } catch (e: NumberFormatException) {
+            return -1
+        }
+        for (elem in results[i + 1]) {
+            if ((elem != '+') && (elem != '-') && (elem != '%'))
+                return -1
+        }
+        if ("+" in results[i + 1] && results[i].toInt() > theBest)
+            theBest = results[i].toInt()
+    }
+    return theBest
+}
 
 /**
  * Сложная (6 баллов)
@@ -138,7 +178,32 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    val list = expression.split(" ")
+    var result = 0
+    if ("+" in list[0] || "-" in list[0])
+        throw IllegalArgumentException()
+    try {
+        result += list[0].toInt()
+    } catch (e: NumberFormatException) {
+        throw IllegalArgumentException()
+    }
+    for (i in 0 until list.size - 2 step (2)) {
+        if ("+" in list[i + 2] || "-" in list[i + 2])
+            throw IllegalArgumentException()
+        try {
+            list[i + 2].toInt()
+        } catch (e: NumberFormatException) {
+            throw IllegalArgumentException()
+        }
+        when {
+            list[i + 1] == "+" -> result += list[i + 2].toInt()
+            list[i + 1] == "-" -> result -= list[i + 2].toInt()
+            else -> throw IllegalArgumentException()
+        }
+    }
+    return result
+}
 
 /**
  * Сложная (6 баллов)
