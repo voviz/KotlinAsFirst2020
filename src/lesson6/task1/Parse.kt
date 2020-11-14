@@ -94,7 +94,7 @@ fun dateStrToDigit(str: String): String {
     val day = date[0].toInt()
     val month = date[1].toInt()
     val year = date[2].toInt()
-    return String.format("%02d.%02d.%02d", day, month, year)
+    return String.format("%02d.%02d.%d", day, month, year)
 }
 
 /**
@@ -159,12 +159,10 @@ fun bestHighJump(jumps: String): Int {
         } catch (e: NumberFormatException) {
             return -1
         }
-        for (elem in results[i + 1]) {
-            if ((elem != '+') && (elem != '-') && (elem != '%'))
-                return -1
-        }
-        if ("+" in results[i + 1] && results[i].toInt() > theBest)
-            theBest = results[i].toInt()
+        val resInt = results[i].toInt()
+        if (results[i + 1].contains(Regex("""[^+\-%]"""))) return -1
+        if ("+" in results[i + 1] && resInt > theBest)
+            theBest = resInt
     }
     return theBest
 }

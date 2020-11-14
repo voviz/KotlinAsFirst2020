@@ -41,6 +41,7 @@ class Tests {
         assertEquals("03.04.2011", dateStrToDigit("3 апреля 2011"))
         assertEquals("", dateStrToDigit("32 сентября 2011"))
         assertEquals("", dateStrToDigit("29 февраля 1993"))
+        assertEquals("01.01.1", dateStrToDigit("01 января 1"))
     }
 
     @Test
@@ -84,7 +85,7 @@ class Tests {
         assertEquals(226, bestHighJump("226 +"))
         assertEquals(-1, bestHighJump("???"))
         assertEquals(230, bestHighJump("220 + 224 %+ 228 %- 230 + 232 %%- 234 %"))
-        assertEquals(-1, bestHighJump("220 + 224 %+ 228 %- 230 + 232 %%- ++234 %+"))
+        assertEquals(-1, bestHighJump("220 + 224 %+ 228 %- 230 + 232 %%*- 234 %+"))
     }
 
     @Test
