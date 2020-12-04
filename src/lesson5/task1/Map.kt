@@ -262,7 +262,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     for (char in word) {
-        if (char !in chars)
+        if (char.toLowerCase() !in chars && char.toUpperCase() !in chars)
             return false
     }
     return true
@@ -310,6 +310,7 @@ fun hasAnagrams(words: List<String>): Boolean {
     var flag = false
     for (word in words) {
         for (otherWord in words - word) {
+            if (word.isEmpty() || otherWord.isEmpty()) return true
             if (otherWord.length == word.length) {
                 for (letter in word) {
                     if (letter !in otherWord) {

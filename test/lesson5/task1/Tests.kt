@@ -235,6 +235,7 @@ class Tests {
         assertFalse(canBuildFrom(emptyList(), "foo"))
         assertTrue(canBuildFrom(listOf('a', 'b', 'o'), "baobab"))
         assertFalse(canBuildFrom(listOf('a', 'm', 'r'), "Marat"))
+        assertTrue(canBuildFrom(listOf('a', 'b', 'o'), "BaoBaB"))
     }
 
     @Test
@@ -262,6 +263,7 @@ class Tests {
         assertFalse(hasAnagrams(listOf("рот", "свет", "код", "дверь")))
         assertFalse(hasAnagrams(listOf("поле", "полено")))
         assertTrue(hasAnagrams(listOf("лунь", "нуль")))
+        assertTrue(hasAnagrams(listOf("", "")))
     }
 
     @Test
