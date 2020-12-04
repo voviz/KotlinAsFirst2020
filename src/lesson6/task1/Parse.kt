@@ -189,14 +189,14 @@ fun plusMinus(expression: String): Int {
     for (i in 0 until list.size - 2 step (2)) {
         if ("+" in list[i + 2] || "-" in list[i + 2])
             throw IllegalArgumentException()
-        try {
+        val x = try {
             list[i + 2].toInt()
         } catch (e: NumberFormatException) {
             throw IllegalArgumentException()
         }
         when {
-            list[i + 1] == "+" -> result += list[i + 2].toInt()
-            list[i + 1] == "-" -> result -= list[i + 2].toInt()
+            list[i + 1] == "+" -> result += x
+            list[i + 1] == "-" -> result -= x
             else -> throw IllegalArgumentException()
         }
     }
@@ -277,3 +277,46 @@ fun fromRoman(roman: String): Int = TODO()
  *
  */
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+
+/**
+
+ * Кодирование длин серий — алгоритм сжатия данных, заменяющий
+ * повторяющиеся символы (серии) на один символ и число его
+ * повторов.
+ * Серией называется последовательность, состоящая из нескольких
+ * одинаковых символов. При кодировании (упаковке, сжатии) строка
+ * одинаковых символов, составляющих серию, заменяется строкой,
+ * содержащей сам повторяющийся символ и количество его повторов.
+ *
+ * Например, строчку aaababbcbbb он переводит в a3bab2cb3.
+ * Реализуйте данный алгоритм.
+ * Имя функции и тип результата функции предложить самостоятельно;
+ * в задании указан тип Any.
+ *
+ * Кроме функции, следует написать тесты,
+ * подтверждающие её работоспособность.
+ */
+
+fun sl(input: String): String {
+    var counter = 1
+    val result = mutableListOf<String>()
+    val count = mutableMapOf<Int, Int>()
+    if (input.isEmpty()) return ""
+    result.add(input[0].toString())
+    for (i in 1 until input.length) {
+        if (input[i] == input[i - 1]) {
+            counter++
+            if (i == input.length - 1) {
+                count[counter] = (count[counter] ?: 0) + 1
+                result.add("$counter")
+            }
+        } else {
+            count[counter] = (count[counter] ?: 0) + 1
+            if (counter != 1)
+                result.add("$counter")
+            result.add(input[i].toString())
+            counter = 1
+        }
+    }
+    return result.joinToString(separator = "")
+}
