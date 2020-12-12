@@ -3,6 +3,7 @@
 package lesson7.task1
 
 import java.io.File
+import kotlin.math.pow
 
 // Урок 7: работа с файлами
 // Урок интегральный, поэтому его задачи имеют сильно увеличенную стоимость
@@ -65,7 +66,7 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
 fun deleteMarked(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
     for (line in File(inputName).readLines()) {
-        if (line.isEmpty() || (line[0] != '_')) {
+        if (!line.startsWith('_')) {
             writer.write(line)
             writer.newLine()
         }
@@ -82,7 +83,28 @@ fun deleteMarked(inputName: String, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> = TODO()
+fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
+    val result = mutableMapOf<String, Int>()
+    for (string in substrings) {
+        result[string] = result[string] ?: 0
+    }
+    val text = File(inputName).readText().toLowerCase()
+    for (string in substrings) {
+        val smal = string.toLowerCase()
+        for (i in text.indices) {
+            var flag = true
+            for (j in smal.indices) {
+                if (text[i + j] != smal[j]) {
+                    flag = false
+                    break
+                }
+            }
+            if (flag)
+                result[string] = result[string]!! + 1
+        }
+    }
+    return result
+}
 
 
 /**
@@ -464,21 +486,46 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  * Вывести в выходной файл процесс деления столбиком числа lhv (> 0) на число rhv (> 0).
  *
  * Пример (для lhv == 19935, rhv == 22):
-19935 | 22
+ 19935 | 22
 -198     906
 ----
-13
--0
---
-135
--132
-----
-3
+   13
+   -0
+   --
+   135
+  -132
+  ----
+     3
 
  * Используемые пробелы, отступы и дефисы должны в точности соответствовать примеру.
  *
  */
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
-    TODO()
+    val writer = File(outputName).bufferedWriter()
+    val result = lhv / rhv
+    var minus = "-" + (result / 10.0.pow(result.toString().length - 1).toInt() * rhv).toString()
+    writer.write(" $lhv | $rhv")
+    writer.newLine()
+    val leng = lhv.toString().length + 4
+    writer.write(minus.padEnd(leng) + result.toString())
+    writer.newLine()
+    writer.write("".padStart(minus.length, '-'))
+    writer.newLine()
+    var currentIndex = minus.length
+    var minused = lhv / (10.0.pow(lhv.toString().length - minus.length + 1).toInt()) + minus.toInt()
+    for (i in 0 until result.toString().length - 1) {
+        writer.write((minused.toString() + lhv.toString()[currentIndex - 1]).padStart(currentIndex + 1))
+        writer.newLine()
+        minus = "-" + (result / 10.0.pow(result.toString().length - i - 2).toInt() % 10 * rhv).toString()
+        writer.write(minus.padStart(currentIndex + 1))
+        writer.newLine()
+        val sticks = "".padStart(minus.length, '-')
+        writer.write(sticks.padStart(currentIndex + 1))
+        minused = (minused.toString() + lhv.toString()[currentIndex - 1]).toInt() + minus.toInt()
+        writer.newLine()
+        currentIndex++
+    }
+    writer.write((lhv % rhv).toString().padStart(currentIndex))
+    writer.close()
 }
 
