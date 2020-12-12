@@ -3,6 +3,7 @@
 package lesson7.task1
 
 import java.io.File
+import kotlin.math.max
 import kotlin.math.pow
 
 // Урок 7: работа с файлами
@@ -90,6 +91,8 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
     }
     val text = File(inputName).readText().toLowerCase()
     for (string in substrings) {
+        if (result[string] != 0)
+            break
         val smal = string.toLowerCase()
         for (i in text.indices) {
             var flag = true
@@ -517,9 +520,11 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
         writer.write((minused.toString() + lhv.toString()[currentIndex - 1]).padStart(currentIndex + 1))
         writer.newLine()
         minus = "-" + (result / 10.0.pow(result.toString().length - i - 2).toInt() % 10 * rhv).toString()
-        writer.write(minus.padStart(currentIndex + 1))
+        if (minus.length >= (minused.toString() + lhv.toString()[currentIndex - 1]).length)
+            writer.write(minus.padStart(currentIndex + 1))
+        else writer.write(minus.padStart(currentIndex))
         writer.newLine()
-        val sticks = "".padStart(minus.length, '-')
+        val sticks = "".padStart(max(minus.length, (minused.toString() + lhv.toString()[currentIndex - 1]).length), '-')
         writer.write(sticks.padStart(currentIndex + 1))
         minused = (minused.toString() + lhv.toString()[currentIndex - 1]).toInt() + minus.toInt()
         writer.newLine()
