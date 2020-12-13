@@ -92,7 +92,7 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
     val text = File(inputName).readText().toLowerCase()
     for (string in substrings) {
         if (result[string] != 0)
-            break
+            continue
         val smal = string.toLowerCase()
         for (i in text.indices) {
             var flag = true
@@ -507,12 +507,20 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     val writer = File(outputName).bufferedWriter()
     val result = lhv / rhv
     var minus = "-" + (result / 10.0.pow(result.toString().length - 1).toInt() * rhv).toString()
-    writer.write(" $lhv | $rhv")
+    if (lhv.toString()[0].toString().toInt() - minus[1].toString().toInt() < 0 || (lhv == lhv % rhv && lhv.toString().length != 1))
+        writer.write("$lhv | $rhv")
+    else writer.write(" $lhv | $rhv")
     writer.newLine()
     val leng = lhv.toString().length + 4
-    writer.write(minus.padEnd(leng) + result.toString())
+    if (lhv.toString()[0].toString().toInt() - minus[1].toString().toInt() < 0)
+        writer.write(minus.padEnd(leng - 1) + result.toString())
+    else if (lhv == lhv % rhv && lhv.toString().length != 1)
+        writer.write(minus.padStart(leng - 4) + "".padStart(3) + result.toString())
+    else writer.write(minus.padEnd(leng) + result.toString())
     writer.newLine()
-    writer.write("".padStart(minus.length, '-'))
+    if (result != 0 || (result == 0 && lhv.toString().length == 1))
+        writer.write("".padStart(minus.length, '-'))
+    else writer.write("".padStart(lhv.toString().length, '-'))
     writer.newLine()
     var currentIndex = minus.length
     var minused = lhv / (10.0.pow(lhv.toString().length - minus.length + 1).toInt()) + minus.toInt()

@@ -86,6 +86,10 @@ Basic, Ruby, Swift.
             mapOf("--" to 4, "ее" to 2, "животное" to 2, "." to 2),
             countSubstrings("input/substrings_in2.txt", listOf("--", "ее", "животное", "."))
         )
+//        assertEquals(
+//            mapOf("аб" to 3, "ааб" to 1),
+//            countSubstrings("input/substrings.txt", listOf("аб", "аб", "ааб"))
+//        )
     }
 
     @Test
@@ -387,6 +391,39 @@ Basic, Ruby, Swift.
             assertFileContent("temp.txt", res.trimIndent())
             File("temp.txt").delete()
         }
+        test(
+            131770,
+            10980,
+            """
+              131770 | 10980
+             -10980    12
+             ------
+               21970
+              -21960
+              ------
+                  10
+            """
+        )
+        test(
+            1631,
+            2989,
+            """
+             1631 | 2989
+               -0   0
+             ----
+             1631
+        """
+        )
+        test(
+            131770,
+            83887,
+            """
+              131770 | 83887
+              -83887   1
+              ------
+               47883
+            """
+        )
         test(
             307874,
             5123,
