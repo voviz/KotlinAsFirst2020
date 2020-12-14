@@ -93,17 +93,11 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
     for (string in substrings) {
         if (result[string] != 0)
             continue
+        var currentIndex = 0
         val smal = string.toLowerCase()
-        for (i in text.indices) {
-            var flag = true
-            for (j in smal.indices) {
-                if (text[i + j] != smal[j]) {
-                    flag = false
-                    break
-                }
-            }
-            if (flag)
-                result[string] = result[string]!! + 1
+        while (text.indexOf(smal, currentIndex) != -1) {
+            result[string] = result[string]!! + 1
+            currentIndex = text.indexOf(smal, currentIndex) + 1
         }
     }
     return result
@@ -507,7 +501,9 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     val writer = File(outputName).bufferedWriter()
     val result = lhv / rhv
     var minus = "-" + (result / 10.0.pow(result.toString().length - 1).toInt() * rhv).toString()
-    if (lhv.toString()[0].toString().toInt() - minus[1].toString().toInt() < 0 || (lhv == lhv % rhv && lhv.toString().length != 1))
+    if (lhv.toString()[0].toString().toInt() - minus[1].toString().toInt() < 0 ||
+        (lhv == lhv % rhv && lhv.toString().length != 1)
+    )
         writer.write("$lhv | $rhv")
     else writer.write(" $lhv | $rhv")
     writer.newLine()
@@ -515,12 +511,12 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     if (lhv.toString()[0].toString().toInt() - minus[1].toString().toInt() < 0)
         writer.write(minus.padEnd(leng - 1) + result.toString())
     else if (lhv == lhv % rhv && lhv.toString().length != 1)
-        writer.write(minus.padStart(leng - 4) + "".padStart(3) + result.toString())
+        writer.write(minus.padStart(leng - 4) + " ".repeat(3) + result.toString())
     else writer.write(minus.padEnd(leng) + result.toString())
     writer.newLine()
     if (result != 0 || (result == 0 && lhv.toString().length == 1))
-        writer.write("".padStart(minus.length, '-'))
-    else writer.write("".padStart(lhv.toString().length, '-'))
+        writer.write("-".repeat(minus.length))
+    else writer.write("-".repeat(lhv.toString().length))
     writer.newLine()
     var currentIndex = minus.length
     var minused = lhv / (10.0.pow(lhv.toString().length - minus.length + 1).toInt()) + minus.toInt()
@@ -528,11 +524,9 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
         writer.write((minused.toString() + lhv.toString()[currentIndex - 1]).padStart(currentIndex + 1))
         writer.newLine()
         minus = "-" + (result / 10.0.pow(result.toString().length - i - 2).toInt() % 10 * rhv).toString()
-        //if (minus.length >= (minused.toString() + lhv.toString()[currentIndex - 1]).length)
         writer.write(minus.padStart(currentIndex + 1))
-        // else writer.write(minus.padStart(currentIndex))
         writer.newLine()
-        val sticks = "".padStart(max(minus.length, (minused.toString() + lhv.toString()[currentIndex - 1]).length), '-')
+        val sticks = "-".repeat(max(minus.length, (minused.toString() + lhv.toString()[currentIndex - 1]).length))
         writer.write(sticks.padStart(currentIndex + 1))
         minused = (minused.toString() + lhv.toString()[currentIndex - 1]).toInt() + minus.toInt()
         writer.newLine()
